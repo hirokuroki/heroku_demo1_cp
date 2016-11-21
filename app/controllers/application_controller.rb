@@ -23,7 +23,9 @@ class ApplicationController < ActionController::Base
       conn = PG::Connection.open(ENV['DATABASE_URL'])
       #query1 = "SELECT * FROM salesforce.sentcoupon__c WHERE user__c = '#{session[:user_id]}' AND sent_time__c <= '#{Time.now.utc}' "
       #@coupons = conn.exec_params(query1)
-      query2 = "SELECT * FROM salesforce.sentcoupon__c WHERE user__c = '#{session[:user_id]}' AND sent_time__c <= '#{Time.now.utc}' AND sent_time__c > '#{(Time.now -  60 * 60 * 24).utc}' "
+      #11/21 hkuroki クーポン取得ロジックの条件緩和
+      #query2 = "SELECT * FROM salesforce.sentcoupon__c WHERE user__c = '#{session[:user_id]}' AND sent_time__c <= '#{Time.now.utc}' AND sent_time__c > '#{(Time.now -  60 * 60 * 24).utc}' "
+      query2 = "SELECT * FROM salesforce.sentcoupon__c WHERE user__c = '#{session[:user_id]}' AND sent_time__c <= '#{Time.now.utc}' "
       @num_coupons = conn.exec_params(query2).num_tuples()
       @has_new_coupons = @num_coupons > 0
       conn.close
